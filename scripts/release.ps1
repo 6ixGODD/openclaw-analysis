@@ -40,6 +40,8 @@ Write-Host "Release tag: $tag"
 Write-Host "Commit:      $head"
 Write-Host "Remote:      $Remote"
 Write-Host ""
+Write-Host "GitHub Pages note: the github-pages environment must allow deployment from tag pattern 'v*'." -ForegroundColor Yellow
+Write-Host ""
 
 $answer = Read-Host "Create and push this release tag? Type 'y' to continue"
 if ($answer -ne "y") {
