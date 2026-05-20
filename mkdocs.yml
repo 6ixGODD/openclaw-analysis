@@ -1,0 +1,41 @@
+site_name: OpenClaw Analysis
+site_description: Source-bound architecture notes for the OpenClaw codebase.
+site_url: ""
+docs_dir: docs
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+nav:
+  - 首页: index.md
+  - 第 1 章：整体架构: architecture.md
+  - 第 2 章：源码地图: source-map.md
+  - 第 3 章：Gateway 运行机制: gateway-runtime.md
+  - 第 4 章：Agent 运行机制: agent-runtime.md
+  - 第 5 章：插件与通道机制: plugins-and-channels.md
+  - 第 6 章：安全分析: security.md
+  - 第 7 章：状态与数据流: state-and-data.md
+  - 第 8 章：记忆、上下文与压缩机制: memory-context-compaction.md
+  - 第 9 章：多 Agent 协同与 Subagent 机制: multi-agent-collaboration.md
+  - 第 10 章：架构亮点与风险点: architecture-highlights.md
+  - 第 11 章：Final Summary: final-summary.md
+
