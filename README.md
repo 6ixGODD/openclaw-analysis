@@ -1,21 +1,32 @@
-# OpenClaw Analysis
+# OpenClaw 源码分析
 
-Source-bound architecture notes for the OpenClaw codebase.
+这是一个面向 OpenClaw 源码阅读、架构理解和后续审计的中文文档仓库。文档站点使用 MkDocs 构建，发布内容位于 `docs/`。
 
-The published documentation is built with MkDocs from `docs/`. The local
-`analysis/` directory is intentionally ignored so drafts can stay out of Git;
-run `scripts/sync-analysis.ps1` before committing when you want to publish
-updated analysis content.
+根目录下的 `analysis/` 是本地草稿目录，已被 `.gitignore` 排除，不会随仓库提交。需要把本地草稿同步到发布文档时，可以运行：
 
-## Local Preview
+```powershell
+./scripts/sync-analysis.ps1
+```
+
+## 本地预览
 
 ```powershell
 python -m pip install -r requirements.txt
 mkdocs serve
 ```
 
-## Publishing
+## 构建检查
 
-GitHub Pages is deployed by `.github/workflows/pages.yml` when a release is
-published, when a `v*` tag is pushed, or when the workflow is run manually.
+```powershell
+mkdocs build --strict
+```
 
+## 发布
+
+GitHub Pages 由 `.github/workflows/pages.yml` 部署。触发方式包括：
+
+- 发布新的 GitHub Release
+- 推送 `v*` 格式的 tag
+- 在 Actions 页面手动运行 workflow
+
+仓库推到 GitHub 后，需要在 Settings -> Pages 中将 Source 设置为 GitHub Actions。

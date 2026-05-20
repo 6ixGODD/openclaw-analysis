@@ -1,8 +1,14 @@
 # OpenClaw 源码深度分析
 
-这组文档面向想读懂 OpenClaw 源码的人：先建立全局模型，再沿着 Gateway、agent runtime、插件/通道、安全和状态数据几个主轴进入实现。它不是用户手册的改写，而是把公开 docs 的行为描述和 `src/`、`extensions/`、`packages/` 中的实现边界绑定起来。
+本文档面向已经具备工程背景、希望理解 OpenClaw 内部结构的读者，包括准备参与开发、评估架构、做安全审计，或需要在插件、通道、Gateway、agent runtime 等边界上继续扩展系统的人。
 
-建议阅读顺序：
+它不是用户手册，也不是 API 索引。这里关心的是源码如何组织关键职责：Gateway 如何承载控制面，agent runtime 如何执行一次 turn，插件如何声明和注册能力，通道如何接入外部消息，状态、记忆、上下文压缩和多 Agent 协同如何在同一个运行时中组合。
+
+阅读时可以把 OpenClaw 先理解为一个本地优先的个人 AI Gateway：外部入口、客户端、消息通道、插件、模型、工具和远程 node 最终都会回到 Gateway 与 session/runtime/policy 这组核心抽象。后续章节会围绕这些抽象展开，而不是按目录逐文件复述。
+
+## 阅读路径
+
+建议按以下顺序阅读：
 
 1. [第 1 章：整体架构](architecture.md)：OpenClaw 的控制平面、运行时平面、插件平面、客户端平面如何组合。
 2. [第 2 章：源码地图](source-map.md)：按目录说明核心职责和适合继续深读的入口文件。
@@ -18,7 +24,7 @@
 
 ## 资料边界
 
-本文档主要使用本仓库的源码和 docs：
+本文档主要依据当前 checkout 中的源码和本地文档：
 
 - 产品入口：`README.md`
 - 公开架构：`docs/concepts/architecture.md`
@@ -52,13 +58,13 @@
 - https://docs.openclaw.ai/concepts/multi-agent
 - https://docs.openclaw.ai/tools/subagents
 
-没有把互联网传闻作为事实来源。若线上 docs 和本地 `docs/` 有差异，应以当前 checkout 的源码与本地 docs 为准。
+若线上文档和当前 checkout 不一致，本文档以当前源码和本地文档为准。
 
 ## 核心结论
 
-OpenClaw 是一个本地优先的个人 AI Gateway，而不是单纯聊天机器人。它把多通道消息接入、agent session、模型/工具运行、远程 node、Control UI、插件能力和安全策略集中到一个长驻 Gateway 中。
+OpenClaw 的核心不是单一聊天界面，而是一个长期运行的本地 AI Gateway。它把多通道消息接入、agent session、模型与工具执行、远程 node、Control UI、插件能力和安全策略集中到同一个控制面中。
 
-最重要的源码边界有四个：
+最重要的源码边界包括：
 
 - Gateway 是控制平面：入口在 `src/gateway/server.ts` 和 `src/gateway/server.impl.ts`。
 - Agent turn 是运行时主路径：入口在 `src/agents/pi-embedded-runner.ts` 和 `src/agents/pi-embedded-runner/run.ts`。
@@ -67,4 +73,4 @@ OpenClaw 是一个本地优先的个人 AI Gateway，而不是单纯聊天机器
 - 记忆不是隐藏状态，而是 workspace 文件、索引、memory plugin 和 context engine 共同完成的显式机制。
 - 多 Agent 不是多个 Gateway，而是同一个 Gateway 下按 agent id、workspace、agentDir、session key、bindings 隔离出来的多套运行上下文。
 
-读源码时不要先从某个 Telegram/Slack 插件开始。先看 Gateway 如何启动插件、agent 如何消费工具和通道、通道如何把外部消息变成 session，再回到具体插件，路径会清晰很多。
+更有效的阅读方式，是先看 Gateway 如何启动插件、agent 如何消费工具和通道、通道如何把外部消息变成 session，再回到具体插件或具体客户端实现。
